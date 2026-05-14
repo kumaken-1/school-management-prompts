@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学校マネジメント相談室 使い方マニュアル</title>
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2e86c1;
+    --accent: #1e8449;
+    --accent-light: #27ae60;
+    --warn: #b7950b;
+    --warn-bg: #fef9e7;
+    --bg: #f4f6f7;
+    --bg-white: #ffffff;
+    --text: #1c2833;
+    --text-muted: #566573;
+    --border: #d5d8dc;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ===== ヘッダー ===== */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.88; }
+
+  /* ===== ナビゲーション ===== */
+  .nav {
+    background: var(--bg-white);
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .nav ul {
+    display: inline-flex;
+    list-style: none;
+    padding: 0 16px;
+  }
+  .nav li a {
+    display: block;
+    padding: 14px 16px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .nav li a:hover { border-bottom-color: var(--primary-light); }
+
+  /* ===== レイアウト ===== */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ===== セクション ===== */
+  section {
+    background: var(--bg-white);
+    margin: 24px 0;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header .icon { font-size: 22px; }
+  .section-header h2 { font-size: 18px; font-weight: 700; }
+  .section-body { padding: 24px; }
+
+  /* ===== 概要カード ===== */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .overview-card {
+    background: #eaf4fc;
+    border: 1px solid #aed6f1;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .overview-card .num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-light);
+  }
+  .overview-card .label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ===== 定食フロー ===== */
+  .flow-wrap {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    min-width: 680px;
+    margin-top: 8px;
+  }
+  .flow-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flow-box {
+    width: 100%;
+    border-radius: 8px;
+    padding: 14px 10px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-box .step-num {
+    display: inline-block;
+    background: white;
+    color: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+  }
+  .flow-box .step-name { font-size: 12px; font-weight: 700; color: white; }
+  .flow-box .step-role { font-size: 10px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .flow-arrow {
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .box-main  { background: var(--primary); }
+  .box-d     { background: #6c3483; }
+  .box-de    { background: #117a65; }
+  .box-p     { background: #784212; }
+  .box-o     { background: #922b21; }
+
+  /* ===== モジュールカード ===== */
+  .module-list { display: grid; gap: 20px; }
+  .module-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .module-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    color: white;
+  }
+  .module-card-header .module-num {
+    font-size: 28px;
+    font-weight: 900;
+    opacity: 0.5;
+    line-height: 1;
+  }
+  .module-card-header .module-info h3 { font-size: 16px; font-weight: 700; }
+  .module-card-header .module-info .module-type { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  .module-card-body { padding: 20px; background: var(--bg-white); }
+  .module-card-body p { color: var(--text-muted); font-size: 14px; margin-bottom: 14px; }
+
+  .mh-main  { background: var(--primary); }
+  .mh-d     { background: #6c3483; }
+  .mh-de    { background: #117a65; }
+  .mh-p     { background: #784212; }
+  .mh-o     { background: #922b21; }
+
+  /* ===== 入出力テーブル ===== */
+  .io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .io-box {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .io-box h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .io-box ul { list-style: none; }
+  .io-box li {
+    font-size: 12px;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .io-box li:last-child { border-bottom: none; }
+  .io-box li::before { content: "▸ "; color: var(--primary-light); }
+
+  /* ===== 手順 ===== */
+  .step-list { counter-reset: step; display: grid; gap: 16px; }
+  .step-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .step-circle {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .step-content p { font-size: 14px; color: var(--text-muted); }
+
+  /* ===== シナリオ ===== */
+  .scenario { margin-top: 20px; }
+  .scenario-title {
+    background: var(--bg);
+    border-left: 4px solid var(--primary-light);
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 16px;
+  }
+  .scenario-step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .scenario-badge {
+    flex-shrink: 0;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .badge-main  { background: var(--primary); }
+  .badge-d     { background: #6c3483; }
+  .badge-de    { background: #117a65; }
+  .badge-p     { background: #784212; }
+  .badge-o     { background: #922b21; }
+
+  .scenario-step .step-text { font-size: 14px; }
+  .scenario-step .step-example {
+    margin-top: 6px;
+    background: #f0f3f4;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text);
+    font-style: italic;
+    border-left: 3px solid var(--border);
+  }
+
+  /* ===== ポイントボックス ===== */
+  .point-box {
+    background: #eaf7fb;
+    border: 1px solid #aed6f1;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .point-box h4 {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .point-box ul { list-style: none; }
+  .point-box li {
+    font-size: 14px;
+    padding: 4px 0;
+  }
+  .point-box li::before { content: "✓ "; color: var(--accent-light); font-weight: 700; }
+
+  .warn-box {
+    background: var(--warn-bg);
+    border: 1px solid #f0c040;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .warn-box h4 {
+    color: var(--warn);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .warn-box li {
+    font-size: 14px;
+    padding: 3px 0;
+    color: var(--text);
+  }
+  .warn-box li::before { content: "⚠ "; }
+
+  /* ===== FAQ ===== */
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .faq-q {
+    background: #f0f3f4;
+    padding: 14px 18px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .faq-q::before { content: "Q. "; color: var(--primary-light); }
+  .faq-a {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--bg-white);
+  }
+  .faq-a::before { content: "A. "; color: var(--accent); font-weight: 700; color: var(--accent-light); }
+
+  /* ===== クイックリファレンス ===== */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .ref-table th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+  }
+  .ref-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ref-table tr:nth-child(even) td { background: #f8f9fa; }
+  .ref-table .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: white;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+
+  /* ===== フッター ===== */
+  footer {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  /* ===== ルーティングカード ===== */
+  .routing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .routing-card {
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+  .routing-card h4 { font-weight: 700; margin-bottom: 6px; font-size: 13px; }
+  .routing-card ul { list-style: none; }
+  .routing-card li { padding: 2px 0; }
+  .routing-card li::before { content: "• "; }
+  .rc-normal { background: #eaf4fc; border: 1px solid #aed6f1; }
+  .rc-normal h4 { color: var(--primary); }
+  .rc-urgent { background: #fdedec; border: 1px solid #f1948a; }
+  .rc-urgent h4 { color: #922b21; }
+  .rc-system { background: #fef9e7; border: 1px solid #f7dc6f; }
+  .rc-system h4 { color: #7d6608; }
+  .rc-data   { background: #eafaf1; border: 1px solid #82e0aa; }
+  .rc-data h4 { color: #1e8449; }
+
+  @media print {
+    .nav { display: none; }
+    section { box-shadow: none; border: 1px solid var(--border); }
+    .header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+  @media (max-width: 600px) {
+    .header h1 { font-size: 20px; }
+    .io-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header class="header">
+  <div class="badge">ver. 5.3 対応 ／ 2026年5月作成</div>
+  <h1>🏫 学校マネジメント相談室<br>使い方マニュアル</h1>
+  <p>AIを使って、学校の「決める・動く・伝える」をすっきりさせる</p>
+</header>
+
+<!-- ナビゲーション -->
+<nav class="nav">
+  <ul>
+    <li><a href="#about">これは何か</a></li>
+    <li><a href="#flow">5本の流れ</a></li>
+    <li><a href="#modules">各モジュール</a></li>
+    <li><a href="#howto">使い方手順</a></li>
+    <li><a href="#scenarios">活用例</a></li>
+    <li><a href="#routing">振り分けルール</a></li>
+    <li><a href="#faq">よくある質問</a></li>
+    <li><a href="#ref">クイック参照</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+<!-- ① これは何か -->
+<section id="about">
+  <div class="section-header">
+    <span class="icon">📖</span>
+    <h2>これは何か</h2>
+  </div>
+  <div class="section-body">
+    <p style="font-size:15px; margin-bottom:16px;">
+      「学校マネジメント相談室」は、学校づくりの相談を受け、<strong>「何を決めれば前に進むか」を明確にして、実行できる形へ整える</strong> AIシステムです。
+      5つのシステムプロンプト（AIへの指示書）を組み合わせて動きます。
+    </p>
+
+    <div class="point-box">
+      <h4>このシステムでできること</h4>
+      <ul>
+        <li>学校の課題を「決めるべき一点」に整理できる</li>
+        <li>方向性の選択肢を比較できる形で出せる</li>
+        <li>実行計画を「誰が・いつ・何を」に落とせる</li>
+        <li>会議資料・通知文・教職員向け共有文などを成果物として出せる</li>
+        <li>危機・制度・データなど特殊な相談も適切な入口へ振り分けられる</li>
+      </ul>
+    </div>
+
+    <div class="warn-box">
+      <h4>これはやらない（大事なこと）</h4>
+      <ul>
+        <li>すぐに施策・解決策を出すことはしない</li>
+        <li>人の性格・能力の評価はしない（構造・役割・制約として見る）</li>
+        <li>安全・制度・数値を根拠なしに断定しない</li>
+        <li>個人情報（児童名・成績・健康情報）をファイルに残さない</li>
+      </ul>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="num">5</div>
+        <div class="label">システムプロンプト<br>（本体1 ＋ モジュール4）</div>
+      </div>
+      <div class="overview-card">
+        <div class="num">5本</div>
+        <div class="label">定食の流れ<br>（S0〜S6の7ステップ）</div>
+      </div>
+      <div class="overview-card">
+        <div class="num">4種</div>
+        <div class="label">別皿モジュール<br>（危機・制度・生徒指導・分析）</div>
+      </div>
+      <div class="overview-card">
+        <div class="num">10</div>
+        <div class="label">品質チェック項目<br>（全モジュール共通）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ② 5本の流れ -->
+<section id="flow">
+  <div class="section-header">
+    <span class="icon">🍱</span>
+    <h2>「定食5本」の流れ — 相談がどう動くか</h2>
+  </div>
+  <div class="section-body">
+    <p style="margin-bottom:16px; font-size:14px; color:var(--text-muted);">
+      通常の学校マネジメント相談は、次の5本の工程を順番に通って成果物になります。<br>
+      危機・制度・データが関わる場合は途中で「別皿モジュール」に切り替わります。
+    </p>
+
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-item">
+          <div class="flow-box box-main">
+            <div class="step-num">S0 入口</div>
+            <div class="step-name">本体エンジン</div>
+            <div class="step-role">相談を受け止め<br>種別を判定</div>
+          </div>
+        </div>
+        <div class="flow-arrow">›</div>
+        <div class="flow-item">
+          <div class="flow-box box-d">
+            <div class="step-num">S1 整理</div>
+            <div class="step-name">対話発想M</div>
+            <div class="step-role">事実・願い・困り感<br>を分け Issue 候補を出す</div>
+          </div>
+        </div>
+        <div class="flow-arrow">›</div>
+        <div class="flow-item">
+          <div class="flow-box box-main">
+            <div class="step-num">S2–S3</div>
+            <div class="step-name">本体エンジン</div>
+            <div class="step-role">Issue 固定 ＋<br>Why 整理</div>
+          </div>
+        </div>
+        <div class="flow-arrow">›</div>
+        <div class="flow-item">
+          <div class="flow-box box-de">
+            <div class="step-num">S4 設計</div>
+            <div class="step-name">学校づくりM</div>
+            <div class="step-role">方向性・選択肢を<br>設計（What）</div>
+          </div>
+        </div>
+        <div class="flow-arrow">›</div>
+        <div class="flow-item">
+          <div class="flow-box box-p">
+            <div class="step-num">S5 計画</div>
+            <div class="step-name">プランニングM</div>
+            <div class="step-role">誰が・いつ・何を<br>に落とす（How）</div>
+          </div>
+        </div>
+        <div class="flow-arrow">›</div>
+        <div class="flow-item">
+          <div class="flow-box box-o">
+            <div class="step-num">S6 出力</div>
+            <div class="step-name">アウトプットM</div>
+            <div class="step-role">読み手に合わせて<br>成果物へ整形</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; padding:14px 18px; background:#f4f6f7; border-radius:8px; font-size:13px; color:var(--text-muted);">
+      <strong>⚡ 別皿モジュール（特殊案件）</strong>：
+      いじめ・不登校などの人的危機 → <strong>生徒指導M</strong> ／
+      事故・怪我・不審者 → <strong>危機管理M</strong> ／
+      時数・制度準拠 → <strong>教務・カリキュラムM</strong> ／
+      データ分析が必要 → <strong>分析M</strong>
+    </div>
+
+    <div style="margin-top:16px;">
+      <p style="font-size:14px; margin-bottom:10px;"><strong>Issue（イシュー）とは何か</strong></p>
+      <div style="background:#eaf4fc; border-left:4px solid var(--primary-light); padding:12px 16px; border-radius:0 6px 6px 0; font-size:14px;">
+        <strong>意思決定を変える一点</strong>のこと。<br>
+        「○○が困っている」「△△をよくしたい」という<em>願望・感想・一般課題</em>とは違い、<br>
+        「<strong>○○について、△△か□□かを決める</strong>」という<em>判断の分岐点</em>として1文で表します。<br>
+        <span style="color:var(--text-muted);">例：「週1回の学年会を、情報共有型から意思決定型へ変えるかどうか」</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ③ 各モジュール -->
+<section id="modules">
+  <div class="section-header">
+    <span class="icon">🔧</span>
+    <h2>各モジュールの役割と使いどころ</h2>
+  </div>
+  <div class="section-body">
+    <div class="module-list">
+
+      <!-- 本体 -->
+      <div class="module-card">
+        <div class="module-card-header mh-main">
+          <div class="module-num">①A</div>
+          <div class="module-info">
+            <h3>学校マネジメント相談室（本体エンジン）</h3>
+            <div class="module-type">main_engine ／ 定食の司令塔</div>
+          </div>
+        </div>
+        <div class="module-card-body">
+          <p>全ての相談を受け止め、どのモジュールへ振り分けるかを決める<strong>本体</strong>です。Issue の固定（S2）と Why の整理（S3）も担当します。通常の相談は「5本定食」で処理し、危機・制度・データが絡む場合だけ別皿モジュールを呼びます。</p>
+          <div class="io-grid">
+            <div class="io-box">
+              <h4>入力</h4>
+              <ul>
+                <li>相談内容（テキスト・メモ）</li>
+                <li>関連資料・表・画像</li>
+                <li>決まっていること・未決事項</li>
+              </ul>
+            </div>
+            <div class="io-box">
+              <h4>出力</h4>
+              <ul>
+                <li>Issue（1文）</li>
+                <li>Why整理（背景・原因・制約）</li>
+                <li>振り分け先のモジュール指示</li>
+              </ul>
+            </div>
+          </div>
+          <div class="point-box" style="margin-top:12px;">
+            <h4>よく使う場面</h4>
+            <ul>
+              <li>何から相談すればいいか分からないとき — まずここへ投げる</li>
+              <li>複数の問題が混在していて整理できていないとき</li>
+              <li>危機が疑われるとき（判断は本体が行う）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 対話発想M -->
+      <div class="module-card">
+        <div class="module-card-header mh-d">
+          <div class="module-num">①B</div>
+          <div class="module-info">
+            <h3>対話発想M</h3>
+            <div class="module-type">dialogue_engine ／ 定食の第2工程</div>
+          </div>
+        </div>
+        <div class="module-card-body">
+          <p>相談の言葉をほどき、<strong>事実・願い・困り感・不明</strong>に分けて Issue 候補を出すモジュールです。解決策を急がず、「何を決めれば前に進むか」だけを探します。相談が混線しているときほど威力を発揮します。</p>
+          <div class="io-grid">
+            <div class="io-box">
+              <h4>入力（本体から受け取る）</h4>
+              <ul>
+                <li>相談内容（混線・断片でOK）</li>
+                <li>学校・学年・分掌の文脈</li>
+                <li>すでに決まっていること</li>
+              </ul>
+            </div>
+            <div class="io-box">
+              <h4>出力（本体へ返す）</h4>
+              <ul>
+                <li>事実 / 願い / 困り感 / 不明の整理</li>
+                <li>Issue候補（最大3つ）</li>
+                <li>主Issue案（1文）</li>
+                <li>副論点・不明点</li>
+              </ul>
+            </div>
+          </div>
+          <div class="point-box" style="margin-top:12px;">
+            <h4>よく使う場面</h4>
+            <ul>
+              <li>「なんとなく困っているが何が問題か分からない」というとき</li>
+              <li>職員間で認識がずれているとき</li>
+              <li>感情的になっていて冷静に整理したいとき</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学校づくりM -->
+      <div class="module-card">
+        <div class="module-card-header mh-de">
+          <div class="module-num">②</div>
+          <div class="module-info">
+            <h3>学校づくりデザインM</h3>
+            <div class="module-type">design_engine ／ 定食の第3工程（What設計）</div>
+          </div>
+        </div>
+        <div class="module-card-body">
+          <p>固定された Issue をもとに、<strong>学校として選べる方向性（What）を設計</strong>するモジュールです。理想論を並べるのではなく、Must とOption を分け、負担・リスク・実行可能性を比較できる形にします。</p>
+          <div class="io-grid">
+            <div class="io-box">
+              <h4>主な手法</h4>
+              <ul>
+                <li>TOT（To・Of・To）：目的の筋を通す</li>
+                <li>A/B/C案：最小・標準・文化変革の3段階</li>
+                <li>Load×Impact：負担と効果の比較表</li>
+              </ul>
+            </div>
+            <div class="io-box">
+              <h4>出力</h4>
+              <ul>
+                <li>設計軸（何を大切にするか）</li>
+                <li>選択肢（A/B/C案）</li>
+                <li>負担・リスク・推奨案</li>
+                <li>プランニングMへの引き継ぎ情報</li>
+              </ul>
+            </div>
+          </div>
+          <div class="point-box" style="margin-top:12px;">
+            <h4>A/B/C案の考え方</h4>
+            <ul>
+              <li><strong>A案（最小）</strong>：追加負担を最小にして今すぐ動かせる案</li>
+              <li><strong>B案（標準）</strong>：仕組みとして整える案（中期）</li>
+              <li><strong>C案（文化変革）</strong>：学校の文化・共通言語へ育てる案（長期）</li>
+            </ul>
+          </div>
+          <div style="margin-top:8px; font-size:13px; color:var(--text-muted);">
+            ※「停止・統合・代替」を必ず考える。増やすだけの提案にしない。
+          </div>
+        </div>
+      </div>
+
+      <!-- プランニングM -->
+      <div class="module-card">
+        <div class="module-card-header mh-p">
+          <div class="module-num">③</div>
+          <div class="module-info">
+            <h3>具体プランニングM</h3>
+            <div class="module-type">planning_engine ／ 定食の第4工程（How具体化）</div>
+          </div>
+        </div>
+        <div class="module-card-body">
+          <p>設計案を受け取り、<strong>誰が・いつ・何を・どの順でするか</strong>に落とすモジュールです。立派な計画表ではなく、「最初の72時間で動ける一手」から始めます。</p>
+          <div class="io-grid">
+            <div class="io-box">
+              <h4>核心3点</h4>
+              <ul>
+                <li>初動72時間（最初の一手）</li>
+                <li>2〜4週間の小さな試行</li>
+                <li>停止・統合・代替（負担制御）</li>
+              </ul>
+            </div>
+            <div class="io-box">
+              <h4>出力</h4>
+              <ul>
+                <li>初動タスク（担当・期限・成果物）</li>
+                <li>役割分担（主担当・相談先・共有先）</li>
+                <li>試行計画と判断日</li>
+                <li>リスク対応・確認点</li>
+              </ul>
+            </div>
+          </div>
+          <div class="point-box" style="margin-top:12px;">
+            <h4>よく使う場面</h4>
+            <ul>
+              <li>方向性は決まったが動き出せていないとき</li>
+              <li>誰が何をすべきか曖昧で止まっているとき</li>
+              <li>年度末・行事・短縮を見越した計画が必要なとき</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- アウトプットM -->
+      <div class="module-card">
+        <div class="module-card-header mh-o">
+          <div class="module-num">④</div>
+          <div class="module-info">
+            <h3>アウトプットM</h3>
+            <div class="module-type">output_engine ／ 定食の第5工程（最終整形）</div>
+          </div>
+        </div>
+        <div class="module-card-body">
+          <p>整理された内容を、<strong>読み手に合わせた成果物へ変換</strong>する最終モジュールです。内容は一切変えません。語彙・文量・構成だけを調整します。</p>
+          <div class="io-grid">
+            <div class="io-box">
+              <h4>作れる成果物</h4>
+              <ul>
+                <li>1枚レジメ（管理職・職員会議用）</li>
+                <li>会議ブリーフ（今日決めること形式）</li>
+                <li>教職員向け共有文</li>
+                <li>保護者向け通知文</li>
+                <li>児童向け説明文</li>
+                <li>比較表・チェックリスト</li>
+              </ul>
+            </div>
+            <div class="io-box">
+              <h4>読み手別の書き分け</h4>
+              <ul>
+                <li>管理職：Issue・判断・根拠・次の一手</li>
+                <li>教職員：担当・期限・手順・確認点</li>
+                <li>保護者：事実・対応・今後・お願い</li>
+                <li>児童：短く・安心・何をすればよいか</li>
+              </ul>
+            </div>
+          </div>
+          <div class="warn-box" style="margin-top:12px;">
+            <h4>絶対にやらないこと</h4>
+            <ul>
+              <li>内容・結論・判断を変えない</li>
+              <li>根拠のない数字・日付・担当者を作らない</li>
+              <li>保護者・児童向けに不安をあおる表現を使わない</li>
+              <li>外部共有文に個人情報・内部事情を含めない</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ④ 使い方手順 -->
+<section id="howto">
+  <div class="section-header">
+    <span class="icon">📝</span>
+    <h2>はじめての使い方 — 5ステップ</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="point-box">
+      <h4>準備：必要なもの</h4>
+      <ul>
+        <li>Claude などの AI チャットツール（システムプロンプトを設定できるもの）</li>
+        <li>相談内容（箇条書き・メモ・断片的な言葉でOK）</li>
+        <li>関係する資料（あれば）：会議メモ、表、配布物の写真など</li>
+      </ul>
+    </div>
+
+    <div class="step-list" style="margin-top:20px;">
+
+      <div class="step-item">
+        <div class="step-circle">1</div>
+        <div class="step-content">
+          <h4>本体エンジン（①A）をシステムプロンプトに設定する</h4>
+          <p>AIツールの「システムプロンプト」欄に、<code>①A 学校マネジメント相談室</code> のプロンプト全文を貼り付けます。これだけで定食5本が自動的に動くようになります。①B〜④のモジュールは、本体が必要に応じて「このモジュールで処理します」と明示しながら使います。</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-circle">2</div>
+        <div class="step-content">
+          <h4>相談内容を貼り付けて送信する</h4>
+          <p>箇条書きでも、会議のメモのままでも構いません。「うまくいかない」「困っている」という感覚だけでも受け取ります。資料や表があれば一緒に添付します。</p>
+          <div style="background:#f0f3f4; border-radius:6px; padding:10px 14px; font-size:13px; margin-top:8px; border-left:3px solid var(--border);">
+            <strong>例：</strong><br>
+            「学年会が毎回1時間以上かかるが、決まらないまま終わることが多い。来週も保護者向け行事の進め方が未決のまま。担任間で温度差がある気がする。」
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-circle">3</div>
+        <div class="step-content">
+          <h4>Issue（決めるべき一点）を確認・修正する</h4>
+          <p>AIが事実・願い・困り感を整理し、Issue 案を1文で提示します。「それは違う」「こっちの方が近い」と返すことで精度が上がります。Issue が固まるまで次には進みません。</p>
+          <div style="background:#f0f3f4; border-radius:6px; padding:10px 14px; font-size:13px; margin-top:8px; border-left:3px solid #6c3483;">
+            <strong>AIの出力例：</strong><br>
+            「Issue案：学年会を『情報共有型』から『意思決定型』に切り替えるかどうか。<br>
+            副論点：担任間の役割分担の明確化 / 保護者行事の最終決裁者の確認。<br>
+            確認：このIssueでよいですか？」
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-circle">4</div>
+        <div class="step-content">
+          <h4>方向性 → 計画 → 成果物の順に進む</h4>
+          <p>Issue が固まると、自動的に <strong>学校づくりM（What）→ プランニングM（How）→ アウトプットM（成果物）</strong> の順に処理が進みます。各段階で「OK」「別の案を見たい」「ここで止めて資料にして」などと指示できます。</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-circle">5</div>
+        <div class="step-content">
+          <h4>成果物を確認・使用する</h4>
+          <p>会議資料・通知文・担当者への共有文などが出力されます。内容はAIが変えていないので、事実確認・数字・日付だけ自分でチェックして使います。「○○向けに書き直して」という指示でいつでも形式を変えられます。</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px; padding:16px; background:#eafaf1; border:1px solid #82e0aa; border-radius:8px; font-size:14px;">
+      <strong>💡 途中でモジュールを指定して使いたいときは？</strong><br>
+      「対話発想Mで整理して」「プランニングMで初動だけ出して」など、モジュール名を指定して呼び出すこともできます。全工程を通さず、部分的に使うことも可能です。
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ 活用シナリオ -->
+<section id="scenarios">
+  <div class="section-header">
+    <span class="icon">🎬</span>
+    <h2>活用例（具体的なシナリオ）</h2>
+  </div>
+  <div class="section-body">
+
+    <!-- シナリオ1 -->
+    <div class="scenario">
+      <div class="scenario-title">📋 シナリオ1：職員会議の議案を作りたい</div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-main">本体</span>
+        <div class="step-text">
+          相談内容を受け取り、「通常の資料作成案件」と判定。
+          <div class="step-example">入力例：「来週の職員会議で、来年度の行事精選について提案したい。削る行事と残す行事の基準をどうするかで揉めそう」</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-d">対話M</span>
+        <div class="step-text">
+          事実・願い・困り感・不明を整理し、Issue を絞る。
+          <div class="step-example">Issue案：「行事精選の判断基準を、来年度から全職員で共有するかどうか」</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-de">設計M</span>
+        <div class="step-text">
+          A/B/C案と負担比較を出す。
+          <div class="step-example">A案：今年度実績を基に各自が判断（追加負担なし）／ B案：判断基準シート1枚を合議で作る（2時間）／ C案：学校ビジョンと連動した精選ルールを策定（1学期かけて）</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-p">計画M</span>
+        <div class="step-text">
+          B案を選んだ場合の初動を出す。
+          <div class="step-example">初動：今週中に教務主任が「判断基準の素案3点」を作成 → 来週職員会議で合議 → 期限：今月末までに確定</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-o">出力M</span>
+        <div class="step-text">
+          職員会議用の1枚レジメと議案書を生成。
+          <div class="step-example">成果物：「議題：行事精選の判断基準について ／ 提案理由 ／ 選択肢A・B・C ／ 本日決めること ／ 担当・期限」</div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin:24px 0;">
+
+    <!-- シナリオ2 -->
+    <div class="scenario">
+      <div class="scenario-title">🏃 シナリオ2：動き出せない取り組みを前に進めたい</div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-main">本体</span>
+        <div class="step-text">
+          <div class="step-example">入力例：「授業づくり通信を月1で出そうとしているが、3ヶ月経っても誰も書かない。声かけても『忙しい』と言われる」</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-d">対話M</span>
+        <div class="step-text">
+          Issue を絞る。
+          <div class="step-example">Issue案：「授業づくり通信を、担任発信型からリーダー主導型に切り替えるかどうか」<br>
+          副論点：そもそも通信の目的が共有されているか確認が必要</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-de">設計M</span>
+        <div class="step-text">
+          停止・統合・代替を含めた選択肢を出す。
+          <div class="step-example">A案：研究主任が1人で書き続ける（負担大）／ B案：持ち回り担当を学期1回に減らす（現実的）／ C案：通信廃止・代替手段（朝の5分共有）に切り替える</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-p">計画M</span>
+        <div class="step-text">
+          C案を試行する場合の初動。
+          <div class="step-example">今週：研究主任が「朝5分共有」の提案を学年主任3名にヒアリング → 来週月曜に1回だけ試す → 2週間後に続けるか判断</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-o">出力M</span>
+        <div class="step-text">
+          教職員向け共有メモを生成。
+          <div class="step-example">「授業づくり通信に代わる試みとして、朝5分の実践共有を○月○日（月）から2週間試します。担当：研究主任。ご協力をお願いします」</div>
+        </div>
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin:24px 0;">
+
+    <!-- シナリオ3 -->
+    <div class="scenario">
+      <div class="scenario-title">📨 シナリオ3：保護者へ説明文を送りたい</div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-main">本体</span>
+        <div class="step-text">
+          「成果物化」案件として処理。
+          <div class="step-example">入力例：「運動会を土曜から木曜に変更することが決まった。保護者への案内文を書きたい。理由は校庭工事の関係。平日なので参観できない人もいる」</div>
+        </div>
+      </div>
+      <div class="scenario-step">
+        <span class="scenario-badge badge-o">出力M</span>
+        <div class="step-text">
+          保護者向け通知文を直接生成。
+          <div class="step-example">「運動会の日程変更についてのお知らせ ／ 変更日：○月○日（木）／ 変更理由：校庭の整備工事のため ／ ご参観はご都合に合わせてください ／ 詳細は〜」</div>
+        </div>
+      </div>
+      <div style="margin-top:8px; font-size:13px; color:var(--text-muted); padding-left:10px;">
+        ※ Issue整理が不要な「成果物作成」は、本体からアウトプットMへ直接ジャンプすることもあります。
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin:24px 0;">
+
+    <!-- シナリオ4（危機） -->
+    <div class="scenario">
+      <div class="scenario-title">⚠️ シナリオ4：危機・制度が絡む相談（別皿モジュール）</div>
+      <div style="background:#fdedec; border:1px solid #f1948a; border-radius:8px; padding:14px 18px; font-size:14px;">
+        <strong>いじめ・不登校・自傷兆候・家庭危機・SNSトラブル</strong> などが疑われる相談は、通常の定食フローを止めて、<strong>生徒指導M</strong> へ切り替わります。<br><br>
+        <strong>事故・怪我・不審者・設備不良・感染症</strong> などは <strong>危機管理・安全管理M</strong> へ切り替わります。<br><br>
+        <span style="color:var(--text-muted);">このとき「まず安全確保を優先する」初動が最初に示されます。Issue 固定より先に初動が来ます。</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ⑥ 振り分けルール -->
+<section id="routing">
+  <div class="section-header">
+    <span class="icon">🔀</span>
+    <h2>振り分けルール — どのモジュールが動くか</h2>
+  </div>
+  <div class="section-body">
+    <p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">相談内容によって、本体が自動的に適切なモジュールを呼びます。</p>
+    <div class="routing-grid">
+      <div class="routing-card rc-normal">
+        <h4>✅ 通常の定食5本</h4>
+        <ul>
+          <li>学年・分掌・体制の相談</li>
+          <li>会議設計・校内コミュニケーション</li>
+          <li>研究・研修の方針</li>
+          <li>働き方・校務整理</li>
+          <li>保護者・地域連携の方向性</li>
+          <li>成果物（資料・通知文）作成</li>
+        </ul>
+      </div>
+      <div class="routing-card rc-urgent">
+        <h4>🚨 別皿：生徒指導M</h4>
+        <ul>
+          <li>いじめが疑われる</li>
+          <li>不登校・登校渋り</li>
+          <li>自傷・心理的危機の兆候</li>
+          <li>SNS・ネットトラブル</li>
+          <li>家庭崩壊・ネグレクト疑い</li>
+        </ul>
+      </div>
+      <div class="routing-card rc-urgent">
+        <h4>🚨 別皿：危機管理M</h4>
+        <ul>
+          <li>事故・怪我が発生</li>
+          <li>不審者の侵入・目撃</li>
+          <li>設備の不良・危険箇所</li>
+          <li>感染症・食中毒の疑い</li>
+          <li>火災・異臭・大規模災害</li>
+        </ul>
+      </div>
+      <div class="routing-card rc-system">
+        <h4>📋 別皿：教務・カリキュラムM</h4>
+        <ul>
+          <li>授業時数・週時程の編成</li>
+          <li>標準時数との適合確認</li>
+          <li>教育課程の制度準拠</li>
+          <li>年間指導計画の調整</li>
+        </ul>
+      </div>
+      <div class="routing-card rc-data">
+        <h4>📊 別皿：分析M（補助）</h4>
+        <ul>
+          <li>Excel・CSV・データがある</li>
+          <li>複数案の数値比較が必要</li>
+          <li>原因構造が見えない</li>
+          <li>根拠パックが必要</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑦ よくある質問 -->
+<section id="faq">
+  <div class="section-header">
+    <span class="icon">💬</span>
+    <h2>よくある質問</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="faq-item">
+      <div class="faq-q">モジュールを1つずつ別々に設定しないといけないの？</div>
+      <div class="faq-a">いいえ。本体エンジン（①A）のプロンプト1つだけ設定すれば、他のモジュールは本体が必要に応じて呼び出します。ただし①B〜④のプロンプトも同じチャットのシステムプロンプトに追加しておくと、各モジュールの動作がより精度よく安定します。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">途中で「もう計画まで要らない、資料だけ出して」と変えられる？</div>
+      <div class="faq-a">できます。「この内容でアウトプットMで1枚レジメにして」と指示すると、それ以前のステップを省略して成果物を出します。ユーザーが求めている段階より前の手続きに戻らないことが設計原則です。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">「Issue」が難しくてよく分からない。</div>
+      <div class="faq-a">大丈夫です。「困っていること」「やりたいこと」を箇条書きで投げるだけで、AIが「Issue案：〇〇かどうか」という形に変換します。「それでいい」「違う、もっと〇〇の部分が本題」と返しながら1文に絞っていきます。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIが出した答えをそのまま使っていいの？</div>
+      <div class="faq-a">内容の判断は必ずご自身で行ってください。AIは「意思決定のサポート」をするものであり、最終判断は管理職・担当者が行います。特に制度・安全・数値に関する情報は必ず一次情報で確認してください。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">個人情報（児童名・成績）を入力してもいいの？</div>
+      <div class="faq-a">入力しないでください。このシステムの設計原則として、個人情報は扱いません。「特定の学年の一部の児童」「Aさん」のように匿名化した形で相談してください。所見の下書きなど個人情報が絡む作業には、別の「所見ドラフトM」を使います。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">相談が多すぎてどこから始めるか分からない。</div>
+      <div class="faq-a">全部を1回の相談で解決しようとしなくて大丈夫です。今一番「決まると前に進む」と感じることを1つだけ投げてください。副論点は整理して保留しておき、メインのIssueが片付いてから次に進めます。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIが長い回答を返してくる。簡潔にできる？</div>
+      <div class="faq-a">「短くまとめて」「次の一手だけ教えて」「判断・処理・出力の3行で」と指示するとコンパクトになります。このシステムは「コンパクト出力モード」が組み込まれており、文脈が共有されているときは自動的に短くなります。</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ⑧ クイック参照 -->
+<section id="ref">
+  <div class="section-header">
+    <span class="icon">📌</span>
+    <h2>クイック参照 — モジュール一覧</h2>
+  </div>
+  <div class="section-body">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>ファイル</th>
+          <th>モジュール名</th>
+          <th>役割</th>
+          <th>使うとき</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>①A</td>
+          <td><span class="tag" style="background:var(--primary);">本体</span>学校マネジメント相談室</td>
+          <td>全体の司令塔、Issue固定、Why整理、振り分け</td>
+          <td>常に設定。全ての入口</td>
+        </tr>
+        <tr>
+          <td>①B</td>
+          <td><span class="tag" style="background:#6c3483;">対話M</span>対話発想M</td>
+          <td>相談を分解して Issue 候補を出す</td>
+          <td>混線・感情的・複雑な相談</td>
+        </tr>
+        <tr>
+          <td>②</td>
+          <td><span class="tag" style="background:#117a65;">設計M</span>学校づくりデザインM</td>
+          <td>What（方向性・選択肢）を設計</td>
+          <td>Issue固定後、方向性を決めるとき</td>
+        </tr>
+        <tr>
+          <td>③</td>
+          <td><span class="tag" style="background:#784212;">計画M</span>具体プランニングM</td>
+          <td>How（誰が・いつ・何を）に落とす</td>
+          <td>方向性が決まり動かすとき</td>
+        </tr>
+        <tr>
+          <td>④</td>
+          <td><span class="tag" style="background:#922b21;">出力M</span>アウトプットM</td>
+          <td>読み手別に成果物へ整形</td>
+          <td>会議資料・通知文・共有文が必要なとき</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:20px;">
+      <p style="font-weight:700; margin-bottom:10px; font-size:14px;">よく使う指示フレーズ</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; font-size:13px;">
+        <div style="background:#f0f3f4; padding:10px 14px; border-radius:6px;">
+          <strong>相談の入口</strong><br>
+          「〇〇で困っています。整理してください」<br>
+          「Issue を1文にしてください」
+        </div>
+        <div style="background:#f0f3f4; padding:10px 14px; border-radius:6px;">
+          <strong>設計・計画</strong><br>
+          「A/B/C案で選択肢を出してください」<br>
+          「初動72時間を教えてください」
+        </div>
+        <div style="background:#f0f3f4; padding:10px 14px; border-radius:6px;">
+          <strong>成果物化</strong><br>
+          「職員会議用の1枚レジメにしてください」<br>
+          「保護者向けの通知文にしてください」
+        </div>
+        <div style="background:#f0f3f4; padding:10px 14px; border-radius:6px;">
+          <strong>調整</strong><br>
+          「もっと短くまとめてください」<br>
+          「A案で計画を詰めてください」
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer>
+  <p>学校マネジメント相談室 ver.5.3 対応マニュアル ／ 作成：2026年5月</p>
+  <p style="margin-top:6px; color:#aaa;">このマニュアル自体もAIで作成しています。内容の最終確認はご自身でお願いします。</p>
+</footer>
+
+</body>
+</html>
